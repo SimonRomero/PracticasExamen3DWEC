@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Document</title>
+    <style>
+        #tabla {
+            border: 1px solid black;
+        }
+        th {
+            border: 1px solid black;
+        }
+        td {
+            border: 1px solid black;
+        }
+    </style>
+    <script>
+        function rellenarTabla(datos) {
+            document.getElementById("userid").textContent = datos["userId"];
+            document.getElementById("id").textContent = datos["id"];
+            document.getElementById("titulo").textContent = datos["title"];
+            document.getElementById("body").textContent = datos["body"];
+        }
+
+        let random = Math.floor((Math.random() * (100-1)) + 1);
+
+        function realizarPeticion() {
+            let myHeaders = new Headers();
+
+            let myInit = { 
+                method: 'GET',
+                headers: myHeaders,
+                mode: 'cors',
+                cache: 'default'
+            };
+
+            const myRequest = new Request("https://jsonplaceholder.typicode.com/posts/" + random, myInit);
+
+            let response = fetch(myRequest).then((response) => {
+                return response.json()
+            }).then((data) => {
+                rellenarTabla(data);
+            })
+        }
+    </script>
+</head>
+<body onload="realizarPeticion()">
+    <table id="tabla">
+        <thead>
+            <tr>
+                <th>USERID</th>
+                <th>ID</th>
+                <th>TÍTULO</th>
+                <th>BODY</th>
+            </tr>
+        </thead>
+        <tbody>
+           
+                <td id="userid"></td>
+            
+                <td id="id"></td>
+            
+            
+                <td id="titulo"></td>
+            
+          
+                <td id="body"></td>
+           
+        </tbody>
+    </table>
+</body>
+</html>

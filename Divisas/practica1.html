@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function rellenarTabla(requerimientos, datos) {
+            let id = document.getElementById("pId");
+            id.innerHTML = datos["id"];
+
+            let title = document.getElementById("pTitle");
+            title.innerHTML = datos["title"];
+            
+            let status = document.getElementById("pStatus");
+            status.innerHTML = datos["status"];
+
+            let shortDescription = document.getElementById("pShortDescription");
+            shortDescription.innerHTML = datos["short_description"];
+
+            let description = document.getElementById("pDescription");
+            description.innerHTML = datos["description"];
+
+            let gameUrl = document.getElementById("pGameUrl");
+            description.innerHTML = datos["game_url"];
+
+            let genre = document.getElementById("pGenre");
+            genre.innerHTML = datos["genre"];
+
+            let platform = document.getElementById("pPlatform");
+            platform.innerHTML = datos["platform"];
+
+            let publisher = document.getElementById("pPublisher");
+            publisher.innerHTML = datos["publisher"];
+
+            let developer = document.getElementById("pDeveloper");
+            developer.innerHTML = datos["developer"];
+
+            let tabla = document.getElementById("tabla");
+            const fila = document.createElement("tr");
+            for (let req in datos[requerimientos]) {
+                
+                const columna = document.createElement("td");
+                
+                columna.innerHTML = datos[requerimientos][req];
+
+                fila.appendChild(columna);
+                tabla.appendChild(fila);
+            }
+        }
+
+        function conexion() {
+            let req = "minimum_system_requirements";
+            $.ajax({
+                async : true,
+	            crossDomain : true,
+	            url : "https://free-to-play-games-database.p.rapidapi.com/api/game?id=452",
+	            method : "GET",
+	            headers: {
+		            "X-RapidAPI-Host": "free-to-play-games-database.p.rapidapi.com",
+		            "X-RapidAPI-Key": "0899d916ecmshef87e9f21eee947p12a638jsne988f8d2d075"
+	            },
+                success : function(data) {
+                    rellenarTabla(req, data);
+                }
+            })
+        }
+
+    </script>
+</head>
+<body onload="conexion()">
+    ID:<p id="pId"></p>
+    TITLE:<p id="pTitle"></p>
+    STATUS:<p id="pStatus"></p>
+    SHORT DESCRIPTION:<p id="pShortDescription"></p>
+    DESCRIPTION:<p id="pDescription"></p>
+    GAME URL:<p id="pGameUrl"></p>
+    GENRE:<p id="pGenre"></p>
+    PLATFORM:<p id="pPlatform"></p>
+    PUBLISHER:<p id="pPublisher"></p>
+    DEVELOPER:<p id="pDeveloper"></p>
+    <table id="tabla">
+        <tr>
+          <th>OS</th>
+          <th>PROCESSOR</th>
+          <th>MEMORY</th>
+          <th>GRAPHICS</th>
+          <th>STORAGE</th>
+        </tr>
+    </table>
+</body>
+</html>

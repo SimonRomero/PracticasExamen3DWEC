@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .probar {
+            background-color: cornflowerblue;
+            color: white;
+            font-family: Arial;
+            font-size: 12px;
+        }
+        
+        .letras {
+            font-size: 12px;
+            width: 12px;
+        }
+    </style>
+    <script>
+        window.onload = iniciar;
+
+        let palabras = ["cabra", "perro", "gordo", "macho", "hilos", "casas", "torno"];
+
+        let iterador = Math.floor(Math.random() * palabras.length);
+        let palabra = palabras[iterador];
+        console.log(palabra);
+
+        let intentos = 0;
+        let contador;
+        let recorrerPalabra;
+        let posicion = 0;
+        let resultado = "";
+        let pasa = 0;
+        let fallos = 0;
+
+        function iniciar() {
+            document.getElementById("probar").addEventListener("keydown", pulsar, true);
+        }
+
+        function pulsar(evento) {
+            if (intentos <= 6) {
+                intentos++;
+                contador = 0;
+                let key = evento.key;
+
+                for (let i = 0; i < palabra.length; i++) {
+                    recorrerPalabra = palabra.substr(contador, 1);
+                    contador++;
+
+                    if (recorrerPalabra == key) {
+                        console.log("encontrado");
+                        posicion = i + 1;
+                        document.getElementsByTagName("input")[posicion].value = key;
+
+                        resultado = resultado + key;
+                        pasa = 1;
+                        recorrerPalabra = "";
+                    }
+                }
+
+                if (pasa == 1) {
+                    pasa = 0;
+                    console.log(resultado);
+                } else {
+                    fallos++;
+                    dibujar(fallos);
+                }
+            } else {
+                if (resultado == palabra) {
+                    alert("GANASTE")
+                }
+            }
+            
+        }
+
+        function dibujar(fallos) {
+
+        }
+    </script>
+</head>
+<body>
+    <div>
+        <img src="./img/ahorcado.jpg" alt="ahorcado" title="ahorcado">
+    </div>
+    <div>
+        <form>
+            <label for="probar">Escribe letra a letra hasta dar con la palabra, tienes 6 intentos como máximo</label>
+            <input class="probar" type="text" name="probar" id="probar" maxlength="6"><br/>
+            <input class="letras" type="text" name="letra1" id="letra1" maxlength="1">
+            <input class="letras" type="text" name="letra2" id="letra2" maxlength="1">
+            <input class="letras" type="text" name="letra3" id="letra3" maxlength="1">
+            <input class="letras" type="text" name="letra4" id="letra4" maxlength="1">
+            <input class="letras" type="text" name="letra5" id="letra5" maxlength="1"><br/>
+            <label id="letras"></label>
+        </form>
+    </div>
+    <p id="aviso"></p>
+</body>
+</html>
+<!--16.810
+17.202
+19.440
+20.313
+20.481
+21.127
+21.750-->

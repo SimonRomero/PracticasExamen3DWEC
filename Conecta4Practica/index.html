@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        const alto = 6;
+        const ancho = 7;
+        let turno = 1;
+
+        let matriz = [[],[],[],[],[],[],[]];
+        for (let i = 0; i < alto; i++) {
+            for (let j = 0; j < ancho; j++) {
+                matriz[i][j] = 0;
+            }
+      }
+
+
+        function pintarMatriz() {
+            for (let i = 0; i < alto; i++) {
+                for(let j = 0; j < ancho; j++) {
+                    let idCasilla = "casilla" + (i + 1) + (j + 1);
+                    let elementoCasilla = document.getElementById(idCasilla);
+
+                    if (matriz[i][j] === 1) {
+                        elementoCasilla.src = './img/roja.jpg';
+                    } else if (matriz[i][j] == 2) {
+                        elementoCasilla.src = './img/amarilla.jpg';
+                    } else {
+                        elementoCasilla.src = './img/vacia.jpg';
+                    }
+                }
+            }
+            return null;
+        }
+
+
+        function echarFicha() {
+            // Obtenemos la columna de la casilla que provocó el evento
+            let target = event.target || event.srcElement;
+            let id = target.id;
+            let columnaStr = id.substr(id.length - 1);
+            let columnaNumero = (parseInt(columnaStr) - 1);
+            let eche = false;
+
+            for(let filaNumero = (alto - 1); filaNumero >= 0; filaNumero--) {
+                if (matriz[filaNumero][columnaNumero] === 0) {
+                    if (turno === 1) {
+                        matriz[filaNumero][columnaNumero] = turno;
+                        turno = 2;
+                    } else  {
+                        matriz[filaNumero][columnaNumero] = turno;
+                        turno = 1;
+                    }
+                    pintarMatriz();
+                    eche = true;
+
+                    break;
+                }
+            }
+        }
+
+        function activarManejadores() {
+            for(let i = 0; i < alto; i++) {
+                for (let j = 0; j < ancho; j++) {
+                    let idCasilla = "casilla" + (i + 1) + (j + 1);
+                    let elementoCasilla = document.getElementById(idCasilla);
+                    elementoCasilla.onclick = echarFicha;
+                    console.log(idCasilla);
+                }
+            }
+        }
+    </script>
+</head>
+<body onLoad="pintarMatriz(); activarManejadores();">
+    <h1>Conecta 4</h1>
+    <table>
+      <tr id="fila1" class="fila">
+        <td id="contenedor11" class="contenedorcasilla">
+          <img id="casilla11" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor12" class="contenedorcasilla">
+          <img id="casilla12" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor13" class="contenedorcasilla">
+          <img id="casilla13" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor14" class="contenedorcasilla">
+          <img id="casilla14" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor15" class="contenedorcasilla">
+          <img id="casilla15" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor16" class="contenedorcasilla">
+          <img id="casilla16" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor17" class="contenedorcasilla">
+          <img id="casilla17" class="casillavacia" src="" alt="vacio">
+        </td>
+      </tr>
+      
+      <tr id="fila2" class="fila">
+        <td id="contenedor21" class="contenedorcasilla">
+          <img id="casilla21" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor22" class="contenedorcasilla">
+          <img id="casilla22" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor23" class="contenedorcasilla">
+          <img id="casilla23" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor24" class="contenedorcasilla">
+          <img id="casilla24" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor25" class="contenedorcasilla">
+          <img id="casilla25" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor26" class="contenedorcasilla">
+          <img id="casilla26" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor27" class="contenedorcasilla">
+          <img id="casilla27" class="casillavacia" src="" alt="vacio">
+        </td>
+      </tr>
+      
+      <tr id="fila3" class="fila">
+        <td id="contenedor31" class="contenedorcasilla">
+          <img id="casilla31" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor32" class="contenedorcasilla">
+          <img id="casilla32" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor33" class="contenedorcasilla">
+          <img id="casilla33" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor34" class="contenedorcasilla">
+          <img id="casilla34" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor35" class="contenedorcasilla">
+          <img id="casilla35" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor36" class="contenedorcasilla">
+          <img id="casilla36" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor37" class="contenedorcasilla">
+          <img id="casilla37" class="casillavacia" src="" alt="vacio">
+        </td>
+      </tr>
+      
+      <tr id="fila4" class="fila">
+        <td id="contenedor41" class="contenedorcasilla">
+          <img id="casilla41" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor42" class="contenedorcasilla">
+          <img id="casilla42" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor43" class="contenedorcasilla">
+          <img id="casilla43" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor44" class="contenedorcasilla">
+          <img id="casilla44" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor45" class="contenedorcasilla">
+          <img id="casilla45" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor46" class="contenedorcasilla">
+          <img id="casilla46" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor47" class="contenedorcasilla">
+          <img id="casilla47" class="casillavacia" src="" alt="vacio">
+        </td>
+      </tr>
+      
+      <tr id="fila5" class="fila">
+        <td id="contenedor51" class="contenedorcasilla">
+          <img id="casilla51" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor52" class="contenedorcasilla">
+          <img id="casilla52" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor53" class="contenedorcasilla">
+          <img id="casilla53" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor54" class="contenedorcasilla">
+          <img id="casilla54" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor55" class="contenedorcasilla">
+          <img id="casilla55" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor56" class="contenedorcasilla">
+          <img id="casilla56" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor57" class="contenedorcasilla">
+          <img id="casilla57" class="casillavacia" src="" alt="vacio">
+        </td>
+      </tr>
+      
+      <tr id="fila6" class="fila">
+        <td id="contenedor61" class="contenedorcasilla">
+          <img id="casilla61" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor62" class="contenedorcasilla">
+          <img id="casilla62" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor63" class="contenedorcasilla">
+          <img id="casilla63" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor64" class="contenedorcasilla">
+          <img id="casilla64" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor65" class="contenedorcasilla">
+          <img id="casilla65" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor66" class="contenedorcasilla">
+          <img id="casilla66" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor67" class="contenedorcasilla">
+          <img id="casilla67" class="casillavacia" src="" alt="vacio">
+        </td>
+      </tr>
+    <table>
+  </body>
+</html>

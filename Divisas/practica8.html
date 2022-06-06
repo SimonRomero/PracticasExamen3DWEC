@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        const columnas = ["gender", "name", "location", "email"];
+
+        function rellenarTabla(nombre, datos) {
+            let tabla = document.getElementById("tabla");
+            for (let i = 0; i < datos["results"].length; i++) {
+                let fila = document.createElement("tr");
+                for (let j = 0; j < columnas.length; j++) {
+                    let celda = document.createElement("td");
+                    let content = document.createTextNode(datos["results"][i][columnas[j]]);
+
+                    celda.appendChild(content);
+                    fila.appendChild(celda);
+                    
+                }
+                for (let name in datos[nombre]) {
+
+
+                    let celda1 = document.createElement("td");
+                    celda1.innerHTML = name;
+
+                    let celda2 = document.createElement("td");
+                    celda2.innerHTML = datos[nombre][name];
+
+                    fila.appendChild(celda1);
+                    fila.appendChild(celda2);
+
+                }
+                tabla.appendChild(fila);
+            }
+        }
+
+        function realizarPeticion() {
+            let results = "results";
+            $.ajax({
+                url : "https://randomuser.me/api/",
+                type : "GET",
+                dataType : "json",
+                success : function(data) {
+                    rellenarTabla(results, data);
+                }
+            })
+        }
+    </script>
+</head>
+<body onload="realizarPeticion()">
+    <table id="tabla">
+        <tr>
+            <th>GENDER</th>
+            <th>NAME</th>
+            <th>LOCATION</th>
+            <th>EMAIL</th>
+        </tr>
+    </table>
+</body>
+</html>

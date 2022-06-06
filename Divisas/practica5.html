@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Document</title>
+    <script>
+        function rellenarTabla(numero, datos) {
+            let tabla = document.getElementById("tabla");
+            const fila = document.createElement("tr");
+
+            
+            for (let num in datos[numero]) {
+                const columna = document.createElement("td");
+                
+                columna.innerHTML = datos[numero][num];
+
+                fila.appendChild(columna);
+                tabla.appendChild(fila);
+            }
+        }
+
+        function conexion() {
+            $.ajax({
+                async: true,
+	            crossDomain: true,
+	            url: "https://free-to-play-games-database.p.rapidapi.com/api/games?sort-by=alphabetical",
+	            method : "GET",
+	            headers : {
+		            "X-RapidAPI-Host": "free-to-play-games-database.p.rapidapi.com",
+		            "X-RapidAPI-Key": "0899d916ecmshef87e9f21eee947p12a638jsne988f8d2d075"
+	            },
+                success : function(data) {
+                    for (let num = 0; num < 7; num++) {
+                        rellenarTabla(num, data);
+                    }
+                }
+            })
+        }
+    </script>
+</head>
+<body onload="conexion()">
+    <table id="tabla">
+        <tr>
+          <th>ID</th>
+          <th>TITLE</th>
+          <th>THUMBNAIL</th>
+          <th>SHORT DESCRIPTION</th>
+          <th>GAME URL</th>
+          <th>GENRE</th>
+          <th>PLATFORM</th>
+          <th>DEVELOPER</th>
+        </tr>
+    </table>
+</body>
+</html>

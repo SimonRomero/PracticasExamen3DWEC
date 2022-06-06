@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Divisas</title>
+    <script>
+    function rellenarTabla(monedaOrigen, datos) {
+      let parrafo = document.getElementById("fecha");
+      parrafo.textContent = datos["date"];
+    
+      let tabla = document.getElementById("tablaPrincipal");
+      tabla.innerHTML = '<tr id="cabecera"><th id="nombre">Moneda</th><th id="cotizacion">Cotizaci&oacute;n</th></tr>'; // vaciamos la tabla por si ya había datos de antes.
+      
+      // recorremos el array que viene en el campo data del JSON, el cual simboliza un usuario por elemento.
+      for (let moneda in datos[monedaOrigen]) {
+        const nuevaFila = document.createElement("tr"); // crea un tag tr.
+        
+        const nuevaCelda = document.createElement("td"); // crea un tag td.
+	      nuevaCelda.innerHTML = moneda;
+        nuevaFila.appendChild(nuevaCelda); //añade el td al tr
+          
+        const nuevaCelda2 = document.createElement("td"); // crea un tag td.
+	      nuevaCelda2.innerHTML = datos[monedaOrigen][moneda];
+        nuevaFila.appendChild(nuevaCelda2); //añade el td al tr
+          
+        tabla.appendChild(nuevaFila); // añade el nuevo tr como último hijo de tablaPrincipal.
+      }
+    }
+    
+    function vaciarTabla() {
+      let parrafo = document.getElementById("fecha");
+      parrafo.textContent = "";
+      
+      let tabla = document.getElementById("tablaPrincipal");
+      tabla.innerHTML = '<tr id="cabecera"><th id="nombre">Moneda</th><th id="cotizacion">Cotizaci&oacute;n</th></tr>';
+    }
+    
+    function realizarPeticion() {
+      let selector = document.getElementById("listaMonedas");
+      let moneda = selector.options[selector.selectedIndex].value;
+
+      let resultado = true;    
+      let myHeaders = new Headers();
+
+      let myInit = { 
+        method: 'GET',
+        headers: myHeaders,
+        mode: 'cors',
+        cache: 'default'
+      };
+
+      const myRequest = new Request('https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/' + moneda + '.json', myInit);
+      
+      let response = fetch(myRequest)
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        if (data !== undefined) {
+          console.log(data);
+          rellenarTabla(moneda, data);
+        } else {
+          resultado = false;
+        }
+      })
+      .catch((error) => {
+        vaciarTabla();
+        console.error(error);
+        resultado = false;
+      });
+      
+      return resultado;
+    }
+    </script>
+  </head>
+  <body>
+    <h1>Divisas</h1>
+    <p>Obtenga las cotizaciones de su moneda favorita</p>
+    <select id="listaMonedas" onchange="realizarPeticion();">  
+      <option value="eur">Euro (EUR)</option>  
+      <option value="usd">Dolar USA (USD)</option>  
+      <option value="jpy">Yen Japon&eacute;s (JPY)</option>  
+      <option value="gbp">Libra Esterlina (GBP)</option>  
+      <option value="chf">Franco Suizo (CHF)</option>  
+    </select>  
+    <p>Fecha de cotizaci&oacute;n</p>
+    <p id="fecha"></p>
+    <table id="tablaPrincipal">
+      <tr id="cabecera">
+        <th id="nombre">Moneda</th>
+        <th id="cotizacion">Cotizaci&oacute;n</th>
+      </tr>
+    </table>
+  </body>
+</html> 

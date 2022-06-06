@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Conecta 4</title>
+    <script>
+      const alto = 6;
+      const ancho = 7;
+          
+      /*
+       * Inicialización
+       */
+      let matriz = [[],[],[],[],[],[],[]];
+      for (let i = 0; i < alto; i++) {
+        for (let j = 0; j < ancho; j++) {
+          matriz[i][j] = 0;
+          console.log(matriz[i][j]);
+        }
+      }
+      
+      let turno = 1;
+      
+      /*
+       * Función que pinta la interfaz dependiendo del estado de la matriz interna.
+       */
+      function pintarMatriz() {
+        for (let i = 0; i < alto; i++) {
+          for (let j = 0; j < ancho; j++) {
+            let nombreCasilla = "casilla" + (i+1) + (j+1);
+            let elementoCasilla = document.getElementById(nombreCasilla);
+            if (matriz[i][j] === 1) {
+              elementoCasilla.src = "./img/roja.jpg";
+            } else if (matriz[i][j] === 2) {
+              elementoCasilla.src = "./img/amarilla.jpg";
+            } else {
+              elementoCasilla.src = "./img/vacia.jpg";
+            }
+          }
+        }
+        
+        return null;
+      }
+      
+      /*
+       * Función comprueba si hay un ganador en horizontal
+       * Devuleve 0 si no hay ganador, 1 si el jugador 1 ha ganado, 2 si el jugador 2 ha ganado.
+       */
+      function comprobarGanadorHorizontal() {
+        for (let i = 0; i < alto; i++) {
+          for (let j = 0; j < (ancho - 3); j++) {
+            if ((matriz[i][j] === 1) && (matriz[i][j+1] === 1) && (matriz[i][j+2] === 1) && (matriz[i][j+3] === 1)) {
+              return 1;
+            } else if ((matriz[i][j] === 2) && (matriz[i][j+1] === 2) && (matriz[i][j+2] === 2) && (matriz[i][j+3] === 2)) {
+              return 2;
+            }  
+          }
+        }
+        
+        return 0;
+      }
+      
+      /*
+       * Función comprueba si hay un ganador en vertical
+       * Devuleve 0 si no hay ganador, 1 si el jugador 1 ha ganado, 2 si el jugador 2 ha ganado.
+       */
+      function comprobarGanadorVertical() {
+        for (let i = 0; i < ancho; i++) {
+          for (let j = 0; j < (alto - 3); j++) {
+            if ((matriz[j][i] === 1) && (matriz[j+1][i] === 1) && (matriz[j+2][i] === 1) && (matriz[j+3][i] === 1)) {
+              return 1;
+            } else if ((matriz[j][i] === 2) && (matriz[j+1][i] === 2) && (matriz[j+2][i] === 2) && (matriz[j+3][i] === 2)) {
+              return 2;
+            }  
+          }
+        }
+        
+        return 0;
+      }
+      
+      /*
+       * Función comprueba si hay un ganador en diagonal ascendente
+       * Devuleve 0 si no hay ganador, 1 si el jugador 1 ha ganado, 2 si el jugador 2 ha ganado.
+       */
+      function comprobarGanadorDiagonalA() {
+        for (let i = 0; i < (alto-3); i++) {
+          for (let j = 0; j < (ancho - 3); j++) {
+            if ((matriz[i][j] === 1) && (matriz[i+1][j+1] === 1) && (matriz[i+2][j+2] === 1) && (matriz[i+3][j+3] === 1)) {
+              return 1;
+            } else if ((matriz[i][j] === 2) && (matriz[i+1][j+1] === 2) && (matriz[i+2][j+2] === 2) && (matriz[i+3][j+3] === 2)) {
+              return 2;
+            }  
+          }
+        }
+        
+        return 0;
+      }
+      
+      /*
+       * Función comprueba si hay un ganador en diagonal descendente
+       * Devuleve 0 si no hay ganador, 1 si el jugador 1 ha ganado, 2 si el jugador 2 ha ganado.
+       */
+      function comprobarGanadorDiagonalB() {
+        for (let i = 3; i < alto; i++) {
+          for (let j = 0; j < (ancho - 3); j++) {
+            if ((matriz[i][j] === 1) && (matriz[i-1][j+1] === 1) && (matriz[i-2][j+2] === 1) && (matriz[i-3][j+3] === 1)) {
+              return 1;
+            } else if ((matriz[i][j] === 2) && (matriz[i-1][j+1] === 2) && (matriz[i-2][j+2] === 2) && (matriz[i-3][j+3] === 2)) {
+              return 2;
+            }  
+          }
+        }
+        
+        return 0;
+      }
+      
+      /*
+       * Función que echa una ficha en una columna si es posible 
+       */
+      function echarFicha() {
+        // obtenemos la columna de la casilla que provocó el evento.
+        let target = event.target || event.srcElement;
+        let id = target.id;
+        let columnaStr = id.substr(id.length - 1);
+        let columnaNumero = (parseInt(columnaStr) - 1);
+        let eche = false;
+        for (let filaNumero = (alto - 1); filaNumero >= 0; filaNumero--) {
+          // comprobamos si cada casilla está ocupada o no.
+          if (matriz[filaNumero][columnaNumero] === 0) {
+            if (turno === 1) {
+              matriz[filaNumero][columnaNumero] = turno;
+              turno = 2;
+            } else  {
+              matriz[filaNumero][columnaNumero] = turno;
+              turno = 1;
+            }
+            pintarMatriz();
+            eche = true;
+            
+            let ganadorVertical = comprobarGanadorVertical();
+            let ganadorHorizontal = comprobarGanadorHorizontal();
+            let ganadorDiagonalA = comprobarGanadorDiagonalA();
+            let ganadorDiagonalB = comprobarGanadorDiagonalB();
+            
+            if ((ganadorVertical === 1) || (ganadorHorizontal === 1) || (ganadorDiagonalA === 1) || (ganadorDiagonalB === 1)) {
+              alert('El jugador 1 es el ganador');
+              desactivarManejadores();
+            } else if ((ganadorVertical === 2) || (ganadorHorizontal === 2) || (ganadorDiagonalA === 2) || (ganadorDiagonalB === 2)) {
+              alert('El jugador 2 es el ganador');
+              desactivarManejadores();
+            }
+            
+            break;
+          }
+        }
+        
+        if (eche === false) {
+          alert('No se puede echar ninguna ficha en esta columna');
+        }
+      }
+      
+      /*
+       * Función que establece los manejadores de la matriz. 
+       */
+      function establecerManejadores() {
+        for (let i = 0; i < alto; i++) {
+          for (let j = 0; j < ancho; j++) {
+            let nombreCasilla = "casilla" + (i+1) + (j+1);
+            let elementoCasilla = document.getElementById(nombreCasilla);
+            elementoCasilla.onclick = echarFicha;
+            //console.log(nombreCasilla);
+          }
+        }
+      }
+      
+      /*
+       * Función que desactiva los manejadores de la matriz. 
+       */
+      function desactivarManejadores() {
+        for (let i = 0; i < alto; i++) {
+          for (let j = 0; j < ancho; j++) {
+            let nombreCasilla = "casilla" + (i+1) + (j+1);
+            let elementoCasilla = document.getElementById(nombreCasilla);
+            elementoCasilla.onclick = null;
+          }
+        }
+      }
+    </script>
+  </head>
+  <body onLoad="pintarMatriz(); establecerManejadores();">
+    <h1>Conecta 4</h1>
+    <table>
+      <tr id="fila1" class="fila">
+        <td id="contenedor11" class="contenedorcasilla">
+          <img id="casilla11" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor12" class="contenedorcasilla">
+          <img id="casilla12" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor13" class="contenedorcasilla">
+          <img id="casilla13" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor14" class="contenedorcasilla">
+          <img id="casilla14" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor15" class="contenedorcasilla">
+          <img id="casilla15" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor16" class="contenedorcasilla">
+          <img id="casilla16" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor17" class="contenedorcasilla">
+          <img id="casilla17" class="casillavacia" src="" alt="vacio">
+        </td>
+      </tr>
+      
+      <tr id="fila2" class="fila">
+        <td id="contenedor21" class="contenedorcasilla">
+          <img id="casilla21" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor22" class="contenedorcasilla">
+          <img id="casilla22" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor23" class="contenedorcasilla">
+          <img id="casilla23" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor24" class="contenedorcasilla">
+          <img id="casilla24" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor25" class="contenedorcasilla">
+          <img id="casilla25" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor26" class="contenedorcasilla">
+          <img id="casilla26" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor27" class="contenedorcasilla">
+          <img id="casilla27" class="casillavacia" src="" alt="vacio">
+        </td>
+      </tr>
+      
+      <tr id="fila3" class="fila">
+        <td id="contenedor31" class="contenedorcasilla">
+          <img id="casilla31" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor32" class="contenedorcasilla">
+          <img id="casilla32" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor33" class="contenedorcasilla">
+          <img id="casilla33" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor34" class="contenedorcasilla">
+          <img id="casilla34" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor35" class="contenedorcasilla">
+          <img id="casilla35" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor36" class="contenedorcasilla">
+          <img id="casilla36" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor37" class="contenedorcasilla">
+          <img id="casilla37" class="casillavacia" src="" alt="vacio">
+        </td>
+      </tr>
+      
+      <tr id="fila4" class="fila">
+        <td id="contenedor41" class="contenedorcasilla">
+          <img id="casilla41" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor42" class="contenedorcasilla">
+          <img id="casilla42" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor43" class="contenedorcasilla">
+          <img id="casilla43" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor44" class="contenedorcasilla">
+          <img id="casilla44" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor45" class="contenedorcasilla">
+          <img id="casilla45" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor46" class="contenedorcasilla">
+          <img id="casilla46" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor47" class="contenedorcasilla">
+          <img id="casilla47" class="casillavacia" src="" alt="vacio">
+        </td>
+      </tr>
+      
+      <tr id="fila5" class="fila">
+        <td id="contenedor51" class="contenedorcasilla">
+          <img id="casilla51" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor52" class="contenedorcasilla">
+          <img id="casilla52" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor53" class="contenedorcasilla">
+          <img id="casilla53" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor54" class="contenedorcasilla">
+          <img id="casilla54" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor55" class="contenedorcasilla">
+          <img id="casilla55" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor56" class="contenedorcasilla">
+          <img id="casilla56" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor57" class="contenedorcasilla">
+          <img id="casilla57" class="casillavacia" src="" alt="vacio">
+        </td>
+      </tr>
+      
+      <tr id="fila6" class="fila">
+        <td id="contenedor61" class="contenedorcasilla">
+          <img id="casilla61" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor62" class="contenedorcasilla">
+          <img id="casilla62" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor63" class="contenedorcasilla">
+          <img id="casilla63" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor64" class="contenedorcasilla">
+          <img id="casilla64" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor65" class="contenedorcasilla">
+          <img id="casilla65" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor66" class="contenedorcasilla">
+          <img id="casilla66" class="casillavacia" src="" alt="vacio">
+        </td>
+        <td id="contenedor67" class="contenedorcasilla">
+          <img id="casilla67" class="casillavacia" src="" alt="vacio">
+        </td>
+      </tr>
+    <table>
+  </body>
+</html> 

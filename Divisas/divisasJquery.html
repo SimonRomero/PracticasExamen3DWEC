@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Document</title>
+    <script>
+      function rellenarTabla(monedaOrigen, datos) {
+          let pFecha = document.getElementById("fecha");
+          pFecha.innerHTML = datos["date"];
+
+          let tabla = document.getElementById("tablaPrincipal");
+          tabla.innerHTML = '<tr id="cabecera"><th id="nombre">Moneda</th><th id="cotizacion">Cotizaci&oacute;n</th></tr>';
+
+          for (let moneda in datos[monedaOrigen]) {
+            const fila = document.createElement("tr");
+
+            const celda1 = document.createElement("td");
+            celda1.innerHTML = moneda;
+            fila.appendChild(celda1);
+
+            const celda2 = document.createElement("td");
+            celda2.innerHTML = datos[monedaOrigen][moneda];
+            fila.appendChild(celda2);
+
+            tabla.appendChild(fila);
+          }
+      }
+
+      function realizarPeticion() {
+        let select = document.getElementById("listaMonedas");
+        let moneda = select.options[select.selectedIndex].value;
+
+        $.ajax({
+          url : "https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/" + moneda + '.json',
+          type : "GET",
+          dataType : "json",
+          success : function (data) {
+            rellenarTabla(moneda, data);
+          }
+        })
+      }
+    </script>
+</head>
+<body>
+    <h1>Divisas</h1>
+    <p>Obtenga las cotizaciones de su moneda favorita</p>
+    <select id="listaMonedas" onchange="realizarPeticion();">  
+      <option value="eur">Euro (EUR)</option>  
+      <option value="usd">Dolar USA (USD)</option>  
+      <option value="jpy">Yen Japon&eacute;s (JPY)</option>  
+      <option value="gbp">Libra Esterlina (GBP)</option>  
+      <option value="chf">Franco Suizo (CHF)</option>  
+    </select>  
+    <p>Fecha de cotizaci&oacute;n</p>
+    <p id="fecha"></p>
+    <table id="tablaPrincipal">
+      <tr id="cabecera">
+        <th id="nombre">Moneda</th>
+        <th id="cotizacion">Cotizaci&oacute;n</th>
+      </tr>
+    </table>
+  </body>
+</html>

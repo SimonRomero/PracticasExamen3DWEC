@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Document</title>
+    <script>
+        function rellenarTabla(bebidas, datos) {
+            let tabla = document.getElementById("tablaPrincipal");
+            tabla.innerHTML = "<tr id=cabecera><th id=strDrink>BEBIDA</th><th id=strDrinkThumb>IMÁGEN</th><th id=idDrink>ID</th></tr>";
+
+            for (let bebida in datos[bebidas]) {
+                const fila = document.createElement("tr");
+
+                const columna = document.createElement("td");
+                
+                columna.innerHTML = datos[bebidas][bebida];
+
+                fila.appendChild(columna);
+                tabla.appendChild(fila);
+            }
+        }
+
+        function realizarPeticion() {
+            let select = document.getElementById("listaMonedas");
+            let bebida = select.options[select.selectedIndex].value;
+            $.ajax({
+                url : 'https://www.thecocktaildb.com/api/json/v1/1/filter.php?a=' + bebida + '.json',
+                type : 'GET',
+                dataType : 'json',
+                success : function(data) {
+                    rellenarTabla(bebida, data);
+                }
+            })
+        }
+    </script>
+</head>
+<body>
+    <h1>Bebidas</h1>
+    <p>Obtenga las bebidas alcoholicas o no alcoholicas</p>
+    <select id="listaMonedas" onchange="realizarPeticion();">  
+      <option value="Alcoholic">Bebidas Alcoholicas</option>  
+      <option value="Non_Alcoholic">Bebidas No Alcoholicas</option>  
+    </select>
+    <table id="tablaPrincipal">
+        <tr id="cabecera">
+          <th id="strDrink">BEBIDA</th>
+          <th id="strDrinkThumb">IMÁGEN</th>
+          <th id="idDrink">ID</th>
+        </tr>
+      </table>
+</body>
+</html>

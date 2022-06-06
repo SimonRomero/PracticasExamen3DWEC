@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Document</title>
+    <script>
+        const columnas = ["status"];
+
+        function rellenarTabla(tabla, datos) {
+            for (let i = 0; i < datos["meta"].length; i++) {
+                let fila = document.createElement("tr");
+                for (let j = 0; j < columnas.length; j++) {
+                    let celda = document.createElement("td");
+                    let content = document.createTextNode(datos["meta"][i][columnas[j]]);
+                    celda.appendChild(content);
+                    fila.appendChild(celda);
+                }
+                tabla.appendChild(fila);
+            }
+        }
+
+        function conexion() {
+            let tabla = document.getElementById("tabla");
+
+            $.ajax({
+                url : "https://genius.p.rapidapi.com/artists/16775/songs",
+                type : "GET",
+                dataType : "json",
+                headers: {
+                    'X-RapidAPI-Host': 'genius.p.rapidapi.com',
+                    'X-RapidAPI-Key': '0899d916ecmshef87e9f21eee947p12a638jsne988f8d2d075'
+                },
+                success : function(data) {
+                    rellenarTabla(tabla, data);
+                }
+            })
+        }
+    </script>
+</head>
+<body onload="conexion()">
+    <table id="tabla">
+        <tr>
+            <th>STATUS</th>
+        </tr>
+    </table>
+</body>
+</html>
